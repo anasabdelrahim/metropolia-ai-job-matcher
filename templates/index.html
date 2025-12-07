@@ -3,56 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metropolia Job Matcher</title>
+    <title>Metropolia AI Job Matcher</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
         body { 
-            background-color: #f0f2f5; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #ffffff; 
+            font-family: 'Open Sans', sans-serif; 
+            color: #333;
         }
         
-        /* الهيدر الأزرق الجديد */
+        .metropolia-top-bar {
+            height: 5px;
+            background-color: #ff5000;
+            width: 100%;
+        }
+        
         .hero-section { 
-            background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%); 
-            color: white; 
-            padding-top: 60px;
-            padding-bottom: 100px; /* مسافة عشان الكروت تدخل فيه */
-            border-radius: 0 0 50px 50px; 
-            box-shadow: 0 4px 20px rgba(0, 102, 204, 0.3); 
-            text-align: center;
+            background-color: #ffffff; 
+            padding-top: 40px;
+            padding-bottom: 40px; 
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
         }
 
-        /* رفع المحتوى للأعلى */
-        .main-content {
-            margin-top: -60px; 
+        .brand-title {
+            font-weight: 700;
+            color: #000;
+            font-size: 2.5rem;
         }
 
-        /* تصميم الكروت */
+        .brand-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .highlight-orange {
+            color: #ff5000;
+        }
+
         .card-custom {
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             background: white;
-            overflow: hidden;
-            margin-bottom: 25px; /* مسافة بين الكروت */
+            margin-bottom: 25px;
         }
 
-        /* عنوان الأقسام */
         .section-header {
             font-weight: 700;
-            color: #444;
-            margin-bottom: 15px;
+            color: #333;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
+            border-bottom: 2px solid #ff5000;
+            padding-bottom: 10px;
+            width: fit-content;
         }
+        
         .section-header i {
             margin-right: 10px;
-            font-size: 1.2rem;
+            color: #ff5000;
         }
 
-        /* دائرة الدرجة */
+        .btn-metropolia {
+            background-color: #ff5000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .btn-metropolia:hover {
+            background-color: #e04500;
+            color: white;
+        }
+        
+        .btn-outline-metropolia {
+            border: 2px solid #ccc;
+            color: #666;
+            border-radius: 4px;
+        }
+        .btn-outline-metropolia:hover {
+            border-color: #333;
+            color: #333;
+            background-color: transparent;
+        }
+
         .score-circle { 
             width: 140px; 
             height: 140px; 
@@ -64,55 +104,54 @@
             font-size: 3.5rem; 
             font-weight: 800; 
             color: white; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15); 
-            border: 6px solid white;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
         }
 
-        /* تحسين شكل القوائم */
         .list-group-item {
             border: none;
             padding: 12px 15px;
             margin-bottom: 5px;
-            border-radius: 10px !important;
-            background-color: #f8f9fa;
+            background-color: #f9f9f9;
+            border-left: 3px solid transparent;
         }
         
-        /* تنسيق خاص للـ Job Description */
-        .job-card {
-            border-left: 5px solid #0066cc;
-        }
+        .border-start-success { border-left-color: #198754 !important; }
+        .border-start-danger { border-left-color: #dc3545 !important; }
+        .text-metropolia { color: #ff5000; }
     </style>
 </head>
 <body>
 
+<div class="metropolia-top-bar"></div>
+
 <div class="hero-section">
-    <div class="container">
-        <h1 class="fw-bold display-5">🎯 AI Job Matcher</h1>
-        <p class="lead opacity-90">Paste a Job Description & Upload your CV to see if you match!</p>
+    <div class="container text-center">
+        <h1 class="brand-title">Metropolia <span class="highlight-orange">AI Job Matcher</span></h1>
+        <p class="brand-subtitle">Empowering students to bridge the gap between education and the Finnish job market.</p>
     </div>
 </div>
 
-<div class="container main-content pb-5">
+<div class="container pb-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
             
             <form method="POST" enctype="multipart/form-data">
                 
-                <div class="card card-custom job-card p-4">
+                <div class="card card-custom p-4">
                     <div class="card-body">
-                        <div class="section-header text-primary">
+                        <div class="section-header">
                             <i class="fas fa-briefcase"></i>
-                            <h5>Target Job Description (Optional)</h5>
+                            <h5>Target Job Description</h5>
                         </div>
-                        <p class="text-muted small mb-2">Paste the job post here. If empty, we will just audit your CV generally.</p>
-                        <textarea class="form-control bg-light border-0" name="job_desc" rows="5" placeholder="e.g. 'We are looking for a Python Developer with Flask experience...'"></textarea>
+                        <p class="text-muted small mb-2">Paste the job advertisement here (Optional).</p>
+                        <textarea class="form-control bg-light border-0" name="job_desc" rows="5" placeholder="e.g. 'We are looking for an Electronics Engineer with Python skills...'"></textarea>
                     </div>
                 </div>
 
                 <div class="card card-custom p-4">
                     <div class="card-body">
                         <div class="section-header">
-                            <i class="fas fa-user-circle"></i>
+                            <i class="fas fa-user-graduate"></i>
                             <h5>Your CV / Resume</h5>
                         </div>
 
@@ -128,16 +167,16 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg flex-grow-1 rounded-pill fw-bold shadow-sm">
-                                <i class="fas fa-magic me-2"></i> Analyze Match
+                            <button type="submit" class="btn btn-metropolia btn-lg flex-grow-1 shadow-sm">
+                                ANALYZE MATCH
                             </button>
-                            <a href="/" class="btn btn-outline-secondary btn-lg rounded-pill px-4" title="Start Over">
+                            <a href="/" class="btn btn-outline-metropolia btn-lg px-4" title="Start Over">
                                 <i class="fas fa-rotate-right"></i>
                             </a>
                         </div>
                         
                         {% if error_msg %}
-                        <div class="alert alert-danger mt-3 text-center rounded-3">{{ error_msg }}</div>
+                        <div class="alert alert-danger mt-3 text-center rounded-1">{{ error_msg }}</div>
                         {% endif %}
                     </div>
                 </div>
@@ -147,10 +186,10 @@
             {% if feedback %}
             <div id="results-area" class="animate-fade-in">
                 
-                <div class="card card-custom text-center p-4">
-                    <h5 class="text-uppercase text-muted letter-spacing-2 mb-4">
-                        {% if job_desc %} Job Match Score {% else %} CV Strength Score {% endif %}
-                    </h5>
+                <div class="card card-custom text-center p-5">
+                    <h6 class="text-uppercase text-muted mb-4">
+                        {% if job_desc %} MATCH COMPATIBILITY {% else %} CV STRENGTH {% endif %}
+                    </h6>
                     
                     <div class="score-circle mb-3" 
                          style="background-color: {% if feedback.score >= 80 %}#198754{% elif feedback.score >= 50 %}#ffc107{% else %}#dc3545{% endif %};">
@@ -164,15 +203,15 @@
 
                 <div class="row g-4">
                     <div class="col-md-6">
-                        <div class="card card-custom h-100 p-3 border-start border-5 border-success">
-                            <h5 class="fw-bold text-success mb-3">
+                        <div class="card card-custom h-100 p-4">
+                            <h6 class="fw-bold text-success mb-3">
                                 <i class="fas fa-check-circle me-2"></i>
-                                {% if job_desc %} Matching Skills {% else %} Strengths {% endif %}
-                            </h5>
+                                {% if job_desc %} MATCHING SKILLS {% else %} STRENGTHS {% endif %}
+                            </h6>
                             {% if feedback.strengths %}
                             <ul class="list-group list-group-flush">
                                 {% for item in feedback.strengths %}
-                                <li class="list-group-item"><i class="fas fa-check text-success me-2"></i>{{ item }}</li>
+                                <li class="list-group-item border-start-success"><small>{{ item }}</small></li>
                                 {% endfor %}
                             </ul>
                             {% else %}
@@ -182,22 +221,22 @@
                     </div>
 
                     <div class="col-md-6">
-                        <div class="card card-custom h-100 p-3 border-start border-5 border-danger">
-                            <h5 class="fw-bold text-danger mb-3">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                {% if job_desc %} Missing Skills {% else %} Improvements {% endif %}
-                            </h5>
+                        <div class="card card-custom h-100 p-4">
+                            <h6 class="fw-bold text-danger mb-3">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                {% if job_desc %} MISSING SKILLS {% else %} IMPROVEMENTS {% endif %}
+                            </h6>
                             <ul class="list-group list-group-flush">
                                 {% for item in feedback.weaknesses %}
-                                <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i>{{ item }}</li>
+                                <li class="list-group-item border-start-danger"><small>{{ item }}</small></li>
                                 {% endfor %}
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <div class="card card-custom mt-4 p-4 border-start border-5 border-primary">
-                    <h5 class="fw-bold text-primary mb-3"><i class="fas fa-lightbulb me-2"></i>Action Plan</h5>
+                <div class="card card-custom mt-4 p-4 border-start border-4 border-warning">
+                    <h6 class="fw-bold text-dark mb-3"><i class="fas fa-lightbulb me-2 text-warning"></i>RECOMMENDED ACTIONS</h6>
                     <ul class="mb-0 ps-3">
                         {% for tip in feedback.improvements %}
                         <li class="mb-2 text-secondary">{{ tip }}</li>
@@ -212,8 +251,8 @@
     </div>
 </div>
 
-<footer class="text-center py-5 text-muted small">
-    <p>Developed for Metropolia R&D Project</p>
+<footer class="text-center py-5 text-muted small border-top mt-5">
+    <p>© 2024 Metropolia UAS Project. Built for R&D Application.</p>
 </footer>
 
 </body>
