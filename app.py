@@ -26,14 +26,19 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def extract_text_from_file(file, filename):
+    """
+    Extracts raw text from PDF, DOCX, or TXT files.
+    """
     text = ""
     extension = filename.rsplit('.', 1)[1].lower()
+    
     try:
         if extension == 'pdf':
             pdf_reader = pypdf.PdfReader(file)
             for page in pdf_reader.pages:
                 text_page = page.extract_text()
-                if text_page: text += text_page + "\n"
+                if text_page:
+                    text += text_page + "\n"
         elif extension == 'docx':
             doc = Document(file)
             for paragraph in doc.paragraphs:
@@ -43,6 +48,7 @@ def extract_text_from_file(file, filename):
     except Exception as e:
         print(f"Error reading file: {e}")
         return None
+        
     return text
 
 def analyze_cv_with_groq(cv_text, job_desc=None):
@@ -50,8 +56,8 @@ def analyze_cv_with_groq(cv_text, job_desc=None):
     Analyzes CV. If job_desc is provided, performs a GAP ANALYSIS.
     """
     
-    # 1. Python Validation Layer (CV Check)
-    bad_keywords = ["learning objectives", "ects credits", "teaching methods", "course unit", "evaluation criteria"]
+    # 1. Python Validation Layer
+    bad_keywords = ["learning objectives", "ects credits", "teaching methods", "course unit", "evaluation criteria", "realization contents"]
     if any(k in cv_text.lower() for k in bad_keywords):
         return {
             "score": 0,
@@ -63,13 +69,13 @@ def analyze_cv_with_groq(cv_text, job_desc=None):
 
     # 2. Dynamic Prompt Construction
     if job_desc and len(job_desc.strip()) > 50:
-        # --- MODE A: JOB MATCHING (مقارنة الوظيفة) ---
+        # --- MODE A: JOB MATCHING ---
         system_prompt = f"""
         You are an expert ATS (Applicant Tracking System). 
         Task: Compare the Candidate's CV against the provided JOB DESCRIPTION (JD).
         
         JOB DESCRIPTION:
-        "{job_desc[:2000]}"... (truncated)
+        "{job_desc[:3000]}"... (truncated)
 
         Calculate a MATCH SCORE (0-100) based on how well the CV fits this specific JD.
         - Strengths = Skills the candidate HAS that match the JD.
@@ -80,7 +86,7 @@ def analyze_cv_with_groq(cv_text, job_desc=None):
         {{ "score": int, "summary": "string", "strengths": [], "weaknesses": [], "improvements": [] }}
         """
     else:
-        # --- MODE B: GENERAL AUDIT (تحليل عام) ---
+        # --- MODE B: GENERAL AUDIT ---
         system_prompt = """
         You are an expert Tech Recruiter. Analyze this CV generally.
         Identify missing keywords, weak verbs, and formatting issues.
@@ -123,27 +129,37 @@ def home():
     error_msg = None
     
     if request.method == 'POST':
-        # Get Job Description Text
-        job_desc = request.form.get('job_desc', '')
+        # --- 1. HANDLE JOB DESCRIPTION (File OR Text) ---
+        # A. Check for Job File Upload
+        if 'job_file' in request.files and request.files['job_file'].filename != '':
+            f = request.files['job_file']
+            if allowed_file(f.filename):
+                extracted_job = extract_text_from_file(f, secure_filename(f.filename))
+                if extracted_job:
+                    job_desc = extracted_job
+        
+        # B. If no file text, check text area
+        if not job_desc:
+            job_desc = request.form.get('job_desc', '')
 
-        # Handle CV File
+        # --- 2. HANDLE CV (File OR Text) ---
+        # A. Check for CV File Upload
         if 'cv_file' in request.files and request.files['cv_file'].filename != '':
-            file = request.files['cv_file']
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                extracted = extract_text_from_file(file, filename)
-                if extracted and len(extracted.strip()) > 50:
-                    cv_text = extracted
+            f = request.files['cv_file']
+            if f and allowed_file(f.filename):
+                extracted_cv = extract_text_from_file(f, secure_filename(f.filename))
+                if extracted_cv and len(extracted_cv.strip()) > 50:
+                    cv_text = extracted_cv
                 else:
-                    error_msg = "Could not read text from file."
+                    error_msg = "Could not read text from CV file."
             else:
-                error_msg = "Invalid file type. PDF/DOCX only."
+                error_msg = "Invalid CV file type. PDF/DOCX only."
 
-        # Handle CV Paste
+        # B. If no file text, check text area
         if not cv_text and 'cv_text' in request.form:
             cv_text = request.form.get('cv_text')
 
-        # Process
+        # --- 3. PROCESS ---
         if cv_text and len(cv_text.strip()) > 20:
             feedback = analyze_cv_with_groq(cv_text, job_desc)
         elif not error_msg and request.method == 'POST':
