@@ -1,0 +1,10 @@
+Flask
+flask-session
+flask-limiter
+openai
+python-dotenv
+pypdf
+python-docx
+gunicorn
+fpdf2
+cachelib
